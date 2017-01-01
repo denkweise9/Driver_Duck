@@ -14,10 +14,6 @@
 #
 # You should have received a copy of the Affero GNU General Public License
 # along with Sloth.  If not, see <http://www.gnu.org/licenses/>.
-#
-
-
-"""
 #Driver duck is a program that was designed to be able to read input from drivers. 
 #(And hopefully, if you already know your driver protocol, you can insert input to get a desired effect.
 #Driver duck's default settings are to read from binary and without an assumed integer base.
@@ -54,6 +50,7 @@ def driver_duck():
     choice = choice.strip().lower()
     #data = while open('/home/usr/Desktop/data.txt','w')
    
+
     if choice == 'help':
         print("Driver_Duck is designed to be able to give the user information on the drivers/protocols being used by their device/s")
         print("")   #improve help for the user.
