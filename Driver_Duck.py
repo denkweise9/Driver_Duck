@@ -2,7 +2,7 @@
 #
 # This file is part of Driver_Duck. A program/project to work with drivers.
 #
-# Sloth is free software: you can redistribute it and/or modify
+# Driver_Duck is free software: you can redistribute it and/or modify
 # it under the terms of the Affero GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
@@ -13,7 +13,8 @@
 # Affero GNU General Public License for more details.
 #
 # You should have received a copy of the Affero GNU General Public License
-# along with Sloth.  If not, see <http://www.gnu.org/licenses/>.
+# along with Driver_Duck.  If not, see <http://www.gnu.org/licenses/>.
+
 #Driver duck is a program that was designed to be able to read input from drivers. 
 #(And hopefully, if you already know your driver protocol, you can insert input to get a desired effect.
 #Driver duck's default settings are to read from binary and without an assumed integer base.
