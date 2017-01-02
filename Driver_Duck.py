@@ -38,7 +38,9 @@
 #Please take note that this program is not done by any means.  However, it does currently offer capabilites as a tool.
 #If you wish to contribute either code, time or knowledge, your efforts are valued as gold.
 
+import subprocess, sys, io   #io is not used yet.
 
+sysc = subprocess.os.system
 
 
 
