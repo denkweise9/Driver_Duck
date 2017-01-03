@@ -1,7 +1,7 @@
 # Copyright 2017, Zian Smtih
 #
 # This file is part of Driver_Duck. A program/project to work with drivers.
-#
+# This program is not yet finished by any means.
 # Driver_Duck is free software: you can redistribute it and/or modify
 # it under the terms of the Affero GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -35,7 +35,7 @@
 
 
 
-#Please take note that this program is not done by any means.  However, it does currently offer capabilites as a tool.
+#Please take note that this program is not done by any means.  However, it does currently offer some capabilites as a tool.
 #If you wish to contribute either code, time or knowledge, your efforts are valued as gold.
 
 import subprocess, sys, io   #io is not used yet.
@@ -102,18 +102,4 @@ def driver_duck():
                 driver.close()
                 sys.exit()
 
-# below is all a prototype and not yet finished
-'''
-    if choice == 'write':
-        path = input('Please enter the path to the device to write input to:  ')
-        driver = open('{0}'.format(path),'wb')
-        
-        while True:
-            try:
-                driver.write(input())    #            
-                
-            except(KeyboardInterrupt):
-                sys.exit()
 
-
-'''
