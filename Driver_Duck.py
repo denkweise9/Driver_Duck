@@ -53,7 +53,7 @@ def driver_duck():
     if sys.platform != 'linux':
         print("Sorry, but Driver_Duck only works on Linux for the time being.")
     else:
-        choice = input("What would you like to do? listd, listops, dumpkeys, change path, read raw, or read binary? ")
+        choice = input("What would you like to do? listd, listops, dumpkeys, change path, show CATPATH, read raw, or read binary? ")
         choice = choice.strip().lower()
         print("Welcome to Driver_Duck!")
 
@@ -65,7 +65,7 @@ def driver_duck():
              
 
         elif choice == None:
-            print("parameters for driver_duck are 'read', 'listd','listops', 'help' or 'write'")  # needs work 
+            print("parameters for driver_duck are 'read', 'listd','listops', 'show CATPATH', 'help' or 'write'")  # needs work 
             driver_duck()
 
         elif choice == 'help':
@@ -98,7 +98,7 @@ def driver_duck():
             driver_duck()
 
         elif choice == "show CATPATH":
-            print(CATPATH)
+            print("The CATPATH currently is: {0}".format(CATPATH))
             driver_duck()
             
             
