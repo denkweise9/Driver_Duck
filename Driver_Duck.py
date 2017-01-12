@@ -93,7 +93,7 @@ def driver_duck():
             print("According to your system, these are the signals used by your keyboard")
             driver_duck()
 
-        elif choice == "show CATPATH":
+        elif choice == "show catpath":
             print("The CATPATH currently is: {0}".format(CATPATH))
             driver_duck()
             
