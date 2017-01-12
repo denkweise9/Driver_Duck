@@ -1,8 +1,8 @@
 # Copyright 2017, Zian Smtih
 #
-# This file is part of Driver_Duck. A program/project to work with drivers.
-# This program is not yet finished by any means.
-# Driver_Duck is free software: you can redistribute it and/or modify
+# This file is part of driver_duck. A program/project to work with drivers.
+#
+# driver_duck is free software: you can redistribute it and/or modify
 # it under the terms of the Affero GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
@@ -13,9 +13,10 @@
 # Affero GNU General Public License for more details.
 #
 # You should have received a copy of the Affero GNU General Public License
-# along with Driver_Duck.  If not, see <http://www.gnu.org/licenses/>.
+# along with driver_duck.  If not, see <http://www.gnu.org/licenses/>.
+#
 
-#Driver duck is a program that was designed to be able to read input from drivers. 
+#driver_duck is a program that was designed to be able to read input from drivers on devices. 
 #(And hopefully, if you already know your driver protocol, you can insert input to get a desired effect.
 #Driver duck's default settings are to read from binary and without an assumed integer base.
 #The goal of Driver duck is to confirm that a device uses a driver protocol, or to reverse engineer driver protocols.
@@ -23,7 +24,7 @@
 #It attempts to give out raw data, as well as data converted to an easier to read format. 
 #It is NOT desgined to give pretty output, rather, we just want reliable infromation that our driver gives.
 
-# Things that conflict with basic concept of Driver duck:
+# Things that conflict with basic concept of driver_duck:
     
 #1) If it assumes a device path, it is wrong.
 #2) If it assumes an int base, it is wrong.
@@ -32,74 +33,145 @@
 #5) If it is incredibly slow, it's wrong.
 #6) If the data the user wishes to write to the device is incorrect, it's wrong
 #7) If the program damages the drivers or device in any way, it's wrong.
+#8) If it utilizes non-gnu software, it's wrong.
 
+''' Things to come.
+1) Windows support (check low level signal)
+2) /dev/dvd (fix io error)
+'''
+import subprocess, sys, io; sysc = subprocess.os.system ;
+# io is not yet used but will be implemented to fix io issues with certain paths.
 
-
-#Please take note that this program is not done by any means.  However, it does currently offer some capabilites as a tool.
-#If you wish to contribute either code, time or knowledge, your efforts are valued as gold.
-
-import subprocess, sys, io   #io is not used yet.
-
-sysc = subprocess.os.system
 
 
 
 def driver_duck():
     print("If you need help with driver__duck then type 'help'.")
-    choice = input("What would you like to do? list, write, dumpkeys, or read? ")
+    
+    CATPATH = '/proc/bus/input/devices'    
 
-    if choice == None:
-        print("parameters for driver_duck is 'read', 'list' or 'write'")  # needs work 
-    choice = choice.strip().lower()
-    #data = while open('/home/usr/Desktop/data.txt','w')
-   
+    if sys.platform != 'linux':
+        print("Sorry, but Driver_Duck only works on Linux for the time being.")
+    else:
+        choice = input("What would you like to do? listd, listops, dumpkeys, change path, read raw, or read binary? ")
+        choice = choice.strip().lower()
+        print("Welcome to Driver_Duck!")
 
-    if choice == 'help':
-        print("Driver_Duck is designed to be able to give the user information on the drivers/protocols being used by their device/s")
-        print("")   #improve help for the user.
+    
+        if choice == 'change path':
+             CATPATHNEW = str(input("Please enter the directory path to the new value of CATPATH. Current Value: {0}".format(CATPATH)))
+             CATPATH = CATPATHNEW
+             driver_duck()
+             
 
-    if choice == 'dumpkeys':
-        if sys.platform == 'linux':
+        elif choice == None:
+            print("parameters for driver_duck are 'read', 'listd','listops', 'help' or 'write'")  # needs work 
+            driver_duck()
+
+        elif choice == 'help':
+        #Give basic's and common path locations to users.
+            print("Driver_Duck is designed to be able to give the user information on the drivers/protocols being used by their device/s")
+            print("parameters for driver_duck are 'read', 'listd','listops', or 'help'") # 'write' We need to implement the 'write' function
+            print("")
+            print("Common device paths include:")
+            print("/dev/input/mouse0")
+            print("/dev/usb/hiddev0")   #improve help for the user.
+            print("")
+            print("'listops' will give more specific information on each command") 
+            driver_duck() 
+
+        elif choice== 'listops':
+            print("listd will read /proc/bus/input/devices to find common devices automatically.")
+            print("You can alter this path by changing the value of CATPATH.")
+            print("'change_path' or 'change path' will both open up a input section for you to change the value of CATPATH")
+            print("'read raw' will just read the input of the device as is. This may not always work.")
+            print("'read binary' will use the builtin 'rb' function with python to open the data as binary. This does not mean your data will be all '10101'.")
+            print("'dumpkeys' will ask the OS you're using to give the data used by the keyboard.")
+            print("")
+            print("")
+            print("")
+            driver_duck()      
+
+        elif choice == 'dumpkeys':
             sysc("dumpkeys")
             print("According to your system, these are the signals used by your keyboard")
-        else:
-            print("Sorry, currently 'dumpkeys' is only available on Linux Machines")
-    
-    if choice == 'list':
-        sysc("cat /proc/bus/input/devices")   # This line should help the user find the path to the device, and devices available
-        print(" These are the devices with the handles used that could be found by Driver_duck")
-        
-    
-    if choice == 'read':
-        path = input('Please enter the path of the device to read from:  ')
-        spacing = 0
-        bytes_received = []
-        driver = open('{0}'.format(path),'rb')
-        
-        while True:
-            try:
-                for each_output in driver.read(True):
-                    bytes_received += [each_output]
-                    if len(bytes_received) == 8:
-                        for each_byte in bytes_received:
-                            sys.stdout.write(str(each_byte))
-                            spacing += 1
-                            if spacing == 2:
-                                sys.stdout.write('\n')
-                                spacing = 0
+            driver_duck()
 
-                stuff = sys.stdout.write(repr(each_output))
-                #output = hex(stuff)
-                print("The current bytes_received are {0}".format(bytes_received))
-                print("The current data given from each_output is ".format(each_output))
-                #data.write(str(stuff))
-                sys.stdout.write('\n')
-                sys.stdout.flush()
+        elif choice == "show CATPATH":
+            print(CATPATH)
+            driver_duck()
+            
+            
+        # This code should help the user find the path to the device/devices available
+        elif choice == 'listd':
+            sysc("cat {0}".format(CATPATH))   
+            print("These are the devices with the handles used that could be found by automatically by Driver_duck")
+            driver_duck()
        
-            except(KeyboardInterrupt, EOFError, UnboundLocalError):
-                print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
-                #data.close()
-                driver.close()
-                sys.exit()
+        
+    
+        elif choice == 'read binary':
+            path = input('Please enter the path of the device to read from:  ')
+            spacing = 0
+            bytes_received = []
+            driver = open('{0}'.format(path),'rb')
+       
+            while True:
+                try:
+                    for each_output in driver.read(True):
+                        bytes_received += [each_output]
+                        if len(bytes_received) == 8:
+                            for each_byte in bytes_received:
+                                sys.stdout.write(str(each_byte))
+                                spacing += 1
+                                if spacing == 2:
+                                    sys.stdout.write('\n')
+                                    spacing = 0
+                    stuff = sys.stdout.write(repr(each_output))
+                    #output = hex(stuff)
+                    print("The current bytes_received are {0}".format(bytes_received))
+                    print("The current data given from each_output is ".format(each_output))
+                    #data.write(str(stuff))
+                    sys.stdout.write('\n')
+                    sys.stdout.flush()
+       
+                except(KeyboardInterrupt, EOFError, UnboundLocalError):
+                    print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
+                    #data.close()
+                    driver.close()
+                    sys.exit()
+        
 
-
+        elif choice == 'read raw':
+            path = input('Please enter the path of the device to read from:  ')
+            spacing = 0
+            bytes_received = []
+            driver = open('{0}'.format(path),'r')
+       
+            while True:
+                try:
+                    for each_output in driver.read(True):
+                        bytes_received += [each_output]
+                        if len(bytes_received) == 8:
+                            for each_byte in bytes_received:
+                                sys.stdout.write(str(each_byte))
+                                spacing += 1
+                                if spacing == 2:
+                                    sys.stdout.write('\n')
+                                    spacing = 0
+                    stuff = sys.stdout.write(repr(each_output))
+                    #output = hex(stuff)
+                    print("The current bytes_received are {0}".format(bytes_received))
+                    print("The current data given from each_output is ".format(each_output))
+                    #data.write(str(stuff))
+                    sys.stdout.write('\n')
+                    sys.stdout.flush()
+       
+                except(KeyboardInterrupt, EOFError, UnboundLocalError):
+                    print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
+                    #data.close()
+                    driver.close()
+                    sys.exit()
+        else:
+            print("An Error has occured.")
+            driver_duck()
