@@ -252,5 +252,10 @@ def driver_duck():
         except(KeyboardInterrupt, EOFError, UnboundLocalError):
             break
             sys.exit()
+            
+            
+            
+if __name__ == "__main__":
+    driver_duck()
 
 
