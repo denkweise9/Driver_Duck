@@ -57,7 +57,7 @@ def driver_duck():
 
     while True: 
         try:   
-            choice = input("What would you like to do? quit, listd, listops, dumpkeys, change catpath, show catpath, read raw, or read binary? ")
+            choice = input("What would you like to do? ask help, quit, listd, listops, dumpkeys, change catpath, show catpath, read raw, or read binary? ")
             choice = choice.strip().lower()
 
             if choice == "show catpath":
@@ -107,7 +107,8 @@ def driver_duck():
             elif choice == 'help':
         #Give basic's and common path locations to users.
                 print("Driver_Duck is designed to be able to give the user information on the drivers/protocols being used by their device/s")
-                print("parameters for driver_duck are 'read raw', 'read io', 'read binary', 'listd','listops','change catpath' 'show catpath', 'help' or 'write'")
+                print("parameters for driver_duck are 'read raw', 'read io', 'read binary', 'listd','listops','change catpath' 'show catpath', 'help',")
+                print("")
                 print("If you need more information on specific commands, type 'listops' which is short for 'list options'")
  #  We need to implement the 'write' function. Not included yet
                 print("")
