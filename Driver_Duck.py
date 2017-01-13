@@ -43,9 +43,12 @@
 #7) If the program damages the drivers or device in any way, it's wrong.
 #8) If it utilizes non-gnu software, it's wrong.
 
+
 import subprocess, sys, io, time; sysc = subprocess.os.system ; sleep = time.sleep ;
 
 def driver_duck():
+    catpath = None
+    devpath = None
 
     if sys.platform != 'linux' and 'linux2':
         print("Sorry, but Driver_Duck only works on Linux for the time being.")
@@ -64,22 +67,14 @@ def driver_duck():
                 if catpath != None:
                     print("The catpath currently is: {0}".format(catpath))
                 else:
-                    answer = input("catpath is not set. Would you like to set it? y/n")
-                    answer = answer.strip().lower()
-                    if answer == 'y':
-                        catpath = str(input("Enter the new path for catpath"))  
-                        choice = input("What would you like to do? quit, listd, listops, dumpkeys, change catpath, show catpath, read raw, or read binary? ")
-                        choice = choice.strip().lower()    
-                        driver_duck()
-                    elif answer == 'n':
-                        pass
+                    print("catpath is None")
 
             elif choice == 'change catpath':
                 if catpath == catpath:
                     catpathnew = str(input("Please enter the directory path to the new value of catpath. Current Value: {0} ".format(catpath)))
                     catpath = catpathnew
-                    print("Now the catpath is {0}".format(CATPATH))
-                    return catpath
+                    print("Now the catpath is {0}".format(catpath))
+                    
                
                 else:
                     answer = input("catpath isn't set. Would you like to set it? y/n")
@@ -252,10 +247,13 @@ def driver_duck():
         except(KeyboardInterrupt, EOFError, UnboundLocalError):
             break
             sys.exit()
-            
-            
-            
+
+
+
+
+
+
+
+#closing
 if __name__ == "__main__":
     driver_duck()
-
-
