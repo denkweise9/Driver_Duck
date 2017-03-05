@@ -1,67 +1,56 @@
-# Copyright 2017, Zian Smtih
-#
-# This file is part of driver_duck. A program/project to work with drivers.
-#
-# driver_duck is free software: you can redistribute it and/or modify
-# it under the terms of the Affero GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+#!/usr/bin/env python
+'''
+    taskhive_crypto.py is a program managing encryption for the Taskhive Client and Network
+    Copyright (C) 2017 Zian Smtih     Authors: denkweise9
 
-# Copyright 2017, Zian Smtih
-#
-# This file is part of driver_duck. A program/project to work with drivers.
-#
-# driver_duck is free software: you can redistribute it and/or modify
-# it under the terms of the Affero GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Driver_Duck is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# Affero GNU General Public License for more details.
-#
-# You should have received a copy of the Affero GNU General Public License
-# along with driver_duck.  If not, see <http://www.gnu.org/licenses/>.
-#
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
 
-#driver_duck is a program that was designed to be able to read input from drivers on devices. 
-#(And hopefully, if you already know your driver protocol, you can insert input to get a desired effect.
-#Driver duck's default settings are to read from binary and without an assumed integer base.
-#The goal of Driver duck is to confirm that a device uses a driver protocol, or to reverse engineer driver protocols.
-#The goal of Driver duck is to make a program that can pick up data from multiple drivers. 
-#It attempts to give out raw data, as well as data converted to an easier to read format. 
-#It is NOT desgined to give pretty output, rather, we just want reliable infromation that our driver gives.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
-# Things that conflict with basic concept of driver_duck:
-    
-#1) If it assumes a device path, it is wrong.
-#2) If it assumes an int base, it is wrong.
-#3) If it works with only mouse drivers but not microphone driver inputs, it's wrong (it should be portable with other drivers).
-#4) If the capture of original traffic has errors, it's wrong.
-#5) If it is incredibly slow, it's wrong.
-#6) If the data the user wishes to write to the device is incorrect, it's wrong
-#7) If the program damages the drivers or device in any way, it's wrong.
-#8) If it utilizes non-gnu software, it's wrong.
-
-
-import subprocess, sys, io, time; sysc = subprocess.os.system ; sleep = time.sleep ;
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see https://www.gnu.org/licenses/.
+'''
+import subprocess, sys, io, time, os; 
+sysc = subprocess.os.system ; sleep = time.sleep ; 
+encoding = os.device_encoding ; byteio = io.BytesIO
+# obj = byteio(b'data here') ; obj.getvalue() ;
+#devpath and catpath are currently experimental in stage. 
+#But the concept is that devpath is the device path you want to acess, catpath is the path you READ from.
+#devpath and catpath are both set to None by default, and will just use the path given from the user.
+#This can be useful but in rare but possible situations.
 
 def driver_duck():
-    catpath = None
-    devpath = None
-
-    if sys.platform != 'linux' and 'linux2':
+    catpath = None # This is a virtual path that leads to a specific data source.
+    devpath = None # This is the directory that may contain one or many places you wish to capture data
+    datapath = "/home/driver_duck/"   # This is the directory where the data capture file is saved.
+    running = True
+    print("Driver_duck is a long term project.") 
+    if not (sys.platform.startswith("linux") or sys.platform.startswith('linux2')):
         print("Sorry, but Driver_Duck only works on Linux for the time being.")
         sleep(2)
     else:
-        print("Welcome to Driver_Duck!")
-        print("\n")
+        print("Welcome to Driver_Duck!\n")
+        print("Driver_duck is a long term GNU project.") 
 
+    print("driver_duck.py was made with python3, you may have issues.") if sys.version[0:2] = '2.'else None
+        
 
-    while True: 
-        try:   
-            choice = input("What would you like to do? ask help, quit, listd, listops, dumpkeys, change catpath, show catpath, read raw, or read binary? ")
-            choice = choice.strip().lower()
+        
+    while running: 
+        try:
+
+            print("If you need more information on driver_duck, use 'help' or 'listops'.")
+            print("If you need more information on your system for driver_duck, use listd, dumpkeys, or show catpath/devpath.")  
+            print("If you already know exactly where you need to get your data, you may begin grabbing data with read raw, read binary, read io.")
+            print("In rare occasions, you might need the assistence of catpat/devpath when reading. Use 'read custom', which will use both catpath and devpath.")
+            choice = input("What would you like to do?  ")
+            choice = choice.casefold().strip()
 
             if choice == "show catpath":
                 if catpath != None:
@@ -74,11 +63,10 @@ def driver_duck():
                     catpathnew = str(input("Please enter the directory path to the new value of catpath. Current Value: {0} ".format(catpath)))
                     catpath = catpathnew
                     print("Now the catpath is {0}".format(catpath))
-                    
-               
+
                 else:
                     answer = input("catpath isn't set. Would you like to set it? y/n")
-                    answer = answer.strip().lower()
+                    answer = answer.casefold().lower()
                     if answer == 'y':
                         catpath = str(input("Enter the new path for catpath"))  
                         
@@ -86,8 +74,33 @@ def driver_duck():
                         pass
                     else:
                         print("Either you gave invalid input, or an error occured.")
-             
-             
+
+
+
+            elif choice == "show devpath":
+                if devpath != None:
+                    print("The devpath currently is: {0}".format(devpath))
+                else:
+                    print("devpath is None")
+
+            elif choice == 'change devpath':
+                if devpath == devpath:
+                    devpathnew = str(input("Please enter the directory path to the new value of catpath. Current Value: {0} ".format(catpath)))
+                    devpath = devpathnew
+                    print("Now the devpath is {0}".format(devpath))
+
+
+                else:
+                    answer = input("devpath isn't set. Would you like to set it? y/n")
+                    answer = answer.strip().casefold()
+                    if answer == 'y':
+                        devpath = str(input("Enter the new path for devpath"))  
+                        
+                    elif answer == 'n':
+                        pass
+                    else:
+                        print("Either you gave invalid input, or an error occured.")
+
 
             elif choice == None:
                 print("parameters for driver_duck are 'quit', 'read', 'listd','listops','change catpath' 'show catpath', or 'help'")  # needs work        
@@ -116,14 +129,16 @@ def driver_duck():
 
             elif choice == 'listops':
                 print("listd will read /proc/bus/input/devices to find common devices automatically.")
-                print("You can alter this path by changing the value of CATPATH.")
-                print("'change_path' or 'change path' will both open up a input section for you to change the value of CATPATH")
+                print("")
+                
                 print("'read raw' will just read the input of the device as is. This may not always work.")
                 print("'read binary' will use the builtin 'rb' function with python to open the data as binary. This does not mean your data will be in all '10101's.")
                 print("'dumpkeys' will ask the OS you're using to give the data used by the keyboard.")
                 print("'show catpath' with show the current file that driver_duck will read to get known devices.")
-                print("'change catpath' will change where driver_duck looks for known devices")
-                print("")
+                print("'change catpath' will change where driver_duck looks to read data.")
+                print("'change devpath' will change the directory where driver_duck looks for data.")
+                print("'change devpath' will change the value of devpath")
+                pass
       
 
             elif choice == 'dumpkeys':
@@ -140,115 +155,187 @@ def driver_duck():
             elif choice == 'listd':
                 print(sysc("cat /proc/bus/input/devices"))   
                 print("These are the devices with the handles used that could be found by automatically by Driver_duck")
+                pass
                 
 
         
     
             elif choice == 'read binary':
                 print("Once driver_duck starts reading, it will keep reading until given a keyboard interrupt, or Ctrl+C")
-                path = input('Please enter the path of the device to read from:  ')
+                print("This will read the data in binary, with no buffering, no encoding.")
+                path = None; towrite = None;
+                while not isinstance((path), (str)) or not isinstance((towrite), (str)):
+                    try:
+                        path = input('Please enter the path of the device to read from:  ')
+                        towrite = input("Do you want to save the gathered data to a file? y/n ")
+                    except(KeyboardInterrupt):
+                        sys.exit()
+                towrite = towrite.casefold().strip()
                 spacing = 0
                 bytes_received = []
-                driver = open('{0}'.format(path),'rb')
-       
+                outputlist = []
+                bytelist = []
+                
+                driver = io.open('{0}'.format(path),'rb', buffering = 0, encoding = None,)
+                if towrite == 'n':
+                    pass
+                else:
+                    file_path = input("Enter the absolute path to the file you want to write to.")
+                    with open("{0}".format(), 'w') as write_file:
+                        for each in bytes_received:
+                            write_file.write(str(bytes_received + ' '))
                 while True:
                     try:
                         for each_output in driver.read(True):
                             bytes_received += [each_output]
+                            outputlist.append([each_output])
                             if len(bytes_received) == 8:
                                 for each_byte in bytes_received:
                                     sys.stdout.write(str(each_byte))
+                                    bytelist.append([each_byte])
                                     spacing += 1
                                     if spacing == 2:
                                         sys.stdout.write('\n')
+                                        bytelist.append(' ')
                                         spacing = 0
                         stuff = sys.stdout.write(repr(each_output))
-                    #output = hex(stuff)
                         print("The current bytes_received are {0}".format(bytes_received))
                         print("The current data given from each_output is ".format(each_output))
-                    #data.write(str(stuff))
                         sys.stdout.write('\n')
                         sys.stdout.flush()
-       
+
+                    except(FileNotFoundError):
+                        file_path = input("Enter the absolute path to the file you want to write to.")
+
                     except(KeyboardInterrupt, EOFError, UnboundLocalError):
                         print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
-                    #data.close()
                         driver.close()
                         break
+
+
+            elif choice == 'read custom':
+                print("Once driver_duck starts reading, it will keep reading until given a keyboard interrupt, or Ctrl+C")
+                print("This will read the data in custom settings.")
+                print("This opton uses both devpath and catpath")
+                if catpath == None:
+                    catpath = input('Please enter the path of the data to read from:  ')
+                if devpath == None:
+                    devpath = input('Please enter path of the device to read from: ')
+                ls = input("Do you want to view the directory of devpath? yes/no " )
+                if str(ls.casefold().strip()) == 'yes':
+                    sysc("ls {0}".format(devpath))
+
+                path = None; towrite = None;
+                while not isinstance( ( path, towrite), (str) ):
+                    try:
+                        path = input('Please enter the path of the device to read from:  ')
+                        towrite = input("Do you want to save the gathered data to a file? y/n ")
+                    except(KeyboardInterrupt):
+                        sys.exit()
+                towrite = towrite.casefold().strip()
+                spacing = 0
+                bytes_received = []
+                outputlist = []
+                bytelist = []
+                
+                driver = io.open('{0}'.format(catpath), int('{0}'.format(buffering_setting)), '{0}'.format(encoding))
+                if towrite == 'n':
+                    pass
+                else:
+                    file_path = input("Enter the absolute path to the file you want to write to.")
+                    with open("{0}".format(), 'w') as write_file:
+                        for each in bytes_received:
+                            write_file.write(str(bytes_received + ' '))
+                while True:
+                    try:
+                        for each_output in driver.read(True):
+                            bytes_received += [each_output]
+                            outputlist.append([each_output])
+                            if len(bytes_received) == 8:
+                                for each_byte in bytes_received:
+                                    sys.stdout.write(str(each_byte))
+                                    bytelist.append([each_byte])
+                                    spacing += 1
+                                    if spacing == 2:
+                                        sys.stdout.write('\n')
+                                        bytelist.append(' ')
+                                        spacing = 0
+                        stuff = sys.stdout.write(repr(each_output))
+                        print("The current bytes_received are {0}".format(bytes_received))
+                        print("The current data given from each_output is ".format(each_output))
+
+                        sys.stdout.write('\n')
+                        sys.stdout.flush()
+                    except(KeyboardInterrupt, EOFError, UnboundLocalError):
+                        print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
+                        driver.close()
+                        break
+
+
+
+
         
 
             elif choice == 'read raw':
-                print("Once driver_duck starts reading, it will keep reading until given a keyboard interrupt, or Ctrl+C")
-                path = input('Please enter the path of the device to read from:  ')
+                print("Once driver_duck starts reading, it will keep reading until given a keyboard interrupt, or Ctrl+C. ")
+                print("You may encounter an int 'base' error. This happens when using incorrect counting system, like hexadecimal instead of binary")
+                #set up variables, get input
+                path = None; towrite = None;
+                while not isinstance((path), (str)) or not isinstance((towrite), (str)):
+                    try:
+                        path = input('Please enter the path of the device to read from:  ')
+                        towrite = input("Do you want to save the gathered data to a file? y/n ")
+                    except(KeyboardInterrupt):
+                        sys.exit()
+                towrite = towrite.casefold().strip()
                 spacing = 0
                 bytes_received = []
-                driver = open('{0}'.format(path),'rb', buffering = 0)  #raw io buffering used.
-       
+                outputlist = []
+                bytelist = []
+                
+                driver = io.open('{0}'.format(path),'r', buffering = 0, encoding = None,)  #do not use 'rb'
+                if towrite == 'n':
+                    pass
+                else:
+                    file_path = input("Enter the absolute path to the file you want to write to.")
+                    with open("{0}".format(), 'w') as write_file:
+                        for each in bytes_received:
+                            write_file.write(str(bytes_received + ' '))
                 while True:
                     try:
                         for each_output in driver.read(True):
                             bytes_received += [each_output]
+                            outputlist.append([each_output])
                             if len(bytes_received) == 8:
                                 for each_byte in bytes_received:
                                     sys.stdout.write(str(each_byte))
+                                    bytelist.append([each_byte])
                                     spacing += 1
                                     if spacing == 2:
                                         sys.stdout.write('\n')
+                                        bytelist.append(' ')
                                         spacing = 0
                         stuff = sys.stdout.write(repr(each_output))
-                    #output = hex(stuff)
                         print("The current bytes_received are {0}".format(bytes_received))
                         print("The current data given from each_output is ".format(each_output))
-                    #data.write(str(stuff))
+
                         sys.stdout.write('\n')
                         sys.stdout.flush()
-       
+
+                    except(FileNotFoundError):
+                        file_path = input("Enter the absolute path to the file you want to write to.")
+
                     except(KeyboardInterrupt, EOFError, UnboundLocalError):
                         print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
-                     #data.close()
                         driver.close()
                         break
 
-#this read io needs work, with a 'read io bytes' option added.
-            elif choice == 'read io':
-                print("Once driver_duck starts reading, it will keep reading until given a keyboard interrupt, or Ctrl+C")
-                path = input('Please enter the path of the device to read from:  ')
-                spacing = 0
-                bytes_received = []
-                driver = io.open('{0}'.format(path),'rb', buffering = 0, encoding = None,)  #raw io buffering used.
-       
-                while True:
-                    try:
-                        for each_output in driver.read(True):
-                            bytes_received += [each_output]
-                            if len(bytes_received) == 8:
-                                for each_byte in bytes_received:
-                                    sys.stdout.write(str(each_byte))
-                                    spacing += 1
-                                    if spacing == 2:
-                                        sys.stdout.write('\n')
-                                        spacing = 0
-                        stuff = sys.stdout.write(repr(each_output))
-                    #output = hex(stuff)
-                        print("The current bytes_received are {0}".format(bytes_received))
-                        print("The current data given from each_output is ".format(each_output))
-                    #data.write(str(stuff))
-                        sys.stdout.write('\n')
-                        sys.stdout.flush()
-       
-                    except(KeyboardInterrupt, EOFError, UnboundLocalError):
-                        print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
-                     #data.close()
-                        driver.close()
-                        break
-            else:
-                print("I'm sorry. Either you gave invalid input or an Internal Error has occured.")
-
-        except(KeyboardInterrupt, EOFError, UnboundLocalError):
-            break
-            sys.exit()
 
 
+
+
+
+#New exception for Windows needed here.
 
 
 
