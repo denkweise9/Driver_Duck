@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
-    taskhive_crypto.py is a program managing encryption for the Taskhive Client and Network
+    driver_duck.py is a program for reading data streams from drivers.
     Copyright (C) 2017 Zian Smtih     Authors: denkweise9
 
     This program is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ def driver_duck():
         print("Welcome to Driver_Duck!\n")
         print("Driver_duck is a long term GNU project.") 
 
-    print("driver_duck.py was made with python3, you may have issues.") if sys.version[0:2] = '2.'else None
+    print("driver_duck.py was made with python3, you may have issues.") if sys.version[0:2] = '2.' else None
         
 
         
