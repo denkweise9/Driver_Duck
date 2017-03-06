@@ -340,6 +340,9 @@ def driver_duck():
                      #data.close()
                         driver.close()
                         break
+        except(KeyboardInterrupt):
+            print("Thank you for using GNU driver_duck.py!")
+            sys.exit()
 
 
 
