@@ -161,6 +161,7 @@ def driver_duck():
             elif choice == 'read binary':
                 print("Once driver_duck starts reading, it will keep reading until given a keyboard interrupt, or Ctrl+C")
                 print("This will read the data in binary, with no buffering, no encoding.")
+                print("If you save the data into a file, it will be written as binary as well")
                 path = None; towrite = None;
                 while not isinstance((path), (str)) or not isinstance((towrite), (str)):
                     try:
@@ -172,7 +173,7 @@ def driver_duck():
                 if towrite == 'n':
                     pass
                 elif towrite == 'y':
-                    file_path = input("Enter the absolute path to the file you want to write to.")
+                    file_path = input("Enter the absolute path to the file you want to write to.\n")
 
                     spacing = 0
                     bytes_received = []
@@ -180,7 +181,7 @@ def driver_duck():
                  
                     driver = io.open(path, 'rb', buffering = 0, encoding = None,)
 
-                    with bytes(file_path, 'w') as write_file:
+                    with open(file_path, 'wb') as write_file:
                         while True:
                             try:
                                 for each_output in driver.read(True):
@@ -268,7 +269,7 @@ def driver_duck():
                     buffering = input("Enter buffering settings, like True, False or None\n")
                     encoding = input("Enter encoding, like 'utf-8' or None\n")
                     driver = io.open(path, read_settings, buffering, encoding)
-                    with bytes(file_path, 'w') as write_file:
+                    with open(file_path, 'w') as write_file:
                         while True:
                             try:
                                 for each_output in driver.read(True):
