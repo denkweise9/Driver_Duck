@@ -344,7 +344,7 @@ def driver_duck():
 
 
 
-def path_setup()
+def path_setup():
     answer = input("Would you like to setup catpath and devpath? y/n: \nYou can set these up later if you choose 'n'.")
     answer = answer.casefold().strip()
     if answer == 'n':
