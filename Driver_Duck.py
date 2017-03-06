@@ -187,7 +187,7 @@ def driver_duck():
                                     bytes_received.append(each_output)
                                     outputlist.append(bytes_received)
                                     print("The output is {0}".format(each_output))
-                                    write_file.write(str(outputlist))
+                                    write_file.write(outputlist)
                                     if len(bytes_received) == 8:
                                         for each_byte in bytes_received:
                                             bytelist.append(each_byte)
@@ -274,7 +274,7 @@ def driver_duck():
                                 for each_output in driver.read(True):
                                     bytes_received.append(each_output)
                                     outputlist.append(bytes_received)
-                                    print("The output is {0}".format(each_output)
+                                    print("The output is {0}".format(each_output))
                                     write_file.write(str(outputlist))
                                     if len(bytes_received) == 8:
                                         for each_byte in bytes_received:
@@ -352,7 +352,7 @@ def driver_duck():
                                 for each_output in driver.read(True):
                                     bytes_received.append(each_output)
                                     outputlist.append(bytes_received)
-                                    print("The output is {0}".format(each_output)
+                                    print("The output is {0}".format(each_output))
                                     write_file.write(str(outputlist))
                                     if len(bytes_received) == 8:
                                         for each_byte in bytes_received:
