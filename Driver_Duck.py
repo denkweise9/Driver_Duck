@@ -36,8 +36,9 @@ def driver_duck():
         sleep(2)
     else:
         print("Welcome to Driver_Duck!\n")
-        print("Driver_duck is a long term GNU project.") 
+        print("Driver_duck is a long term GNU project.")
 
+    path_setup()
 
     while running: 
         try:
@@ -343,8 +344,17 @@ def driver_duck():
 
 
 
-
-
+def path_setup()
+    answer = input("Would you like to setup catpath and devpath? y/n: \nYou can set these up later if you choose 'n'.")
+    answer = answer.casefold().strip()
+    if answer == 'n':
+        pass
+    elif answer == 'y':
+        catpath = input("Enter the absolute path for catpath\n")
+        devpath = input("Enter the absolute path for devpath\n")
+    else:
+        print("Invalid syntax, y or n")
+        path_setup()
 #New exception for Windows needed here.
 
 
