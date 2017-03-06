@@ -174,6 +174,12 @@ def driver_duck():
                 elif towrite == 'y':
                     file_path = input("Enter the absolute path to the file you want to write to.")
 
+                    spacing = 0
+                    bytes_received = []
+                    bytelist = []
+                 
+                    driver = io.open(path, 'rb', buffering = 0, encoding = None,)
+
                     with bytes(file_path, 'w') as write_file:
                         while True:
                             try:
@@ -254,6 +260,14 @@ def driver_duck():
                 elif towrite == 'y':
                     file_path = input("Enter the absolute path to the file you want to write to.")
 
+                    spacing = 0
+                    bytes_received = []
+                    bytelist = []
+                  
+                    read_settings = input("Enter reading settings, like 'rb'\n")
+                    buffering = input("Enter buffering settings, like True, False or None\n")
+                    encoding = input("Enter encoding, like 'utf-8' or None\n")
+                    driver = io.open(path, read_settings, buffering, encoding)
                     with bytes(file_path, 'w') as write_file:
                         while True:
                             try:
@@ -280,8 +294,11 @@ def driver_duck():
                 spacing = 0
                 bytes_received = []
                 bytelist = []
+                read_settings = input("Enter reading settings, like 'rb'\n")
+                buffering = input("Enter buffering settings, like True, False or None\n")
+                encoding = input("Enter encoding, like 'utf-8' or None\n")
                 
-                driver = io.open(path, 'rb', buffering = 0, encoding = None,)
+                driver = io.open(path, read_settings, buffering, encoding)
 
                 while True:
                     try:
