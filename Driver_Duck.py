@@ -20,10 +20,10 @@ import subprocess, sys, io, time, os;
 sysc = subprocess.os.system ; sleep = time.sleep ; 
 encoding = os.device_encoding ; byteio = io.BytesIO
 # obj = byteio(b'data here') ; obj.getvalue() ;
-#devpath and catpath are currently experimental in stage. 
-#But the concept is that devpath is the device path you want to acess, catpath is the path you READ from.
+
 #devpath and catpath are both set to None by default, and will just use the path given from the user.
 #This can be useful but in rare but possible situations.
+
 
 def driver_duck():
     catpath = None # This is a virtual path that leads to a specific data source.
@@ -38,10 +38,7 @@ def driver_duck():
         print("Welcome to Driver_Duck!\n")
         print("Driver_duck is a long term GNU project.") 
 
-    print("driver_duck.py was made with python3, you may have issues.") if sys.version[0:2] = '2.' else None
-        
 
-        
     while running: 
         try:
 
@@ -179,11 +176,13 @@ def driver_duck():
                 driver = io.open('{0}'.format(path),'rb', buffering = 0, encoding = None,)
                 if towrite == 'n':
                     pass
-                else:
+                elif towrite == 'y':
                     file_path = input("Enter the absolute path to the file you want to write to.")
                     with open("{0}".format(), 'w') as write_file:
                         for each in bytes_received:
                             write_file.write(str(bytes_received + ' '))
+                else:
+                    print("Error with checking write option occured")
                 while True:
                     try:
                         for each_output in driver.read(True):
@@ -199,8 +198,10 @@ def driver_duck():
                                         bytelist.append(' ')
                                         spacing = 0
                         stuff = sys.stdout.write(repr(each_output))
+                    #output = hex(stuff)
                         print("The current bytes_received are {0}".format(bytes_received))
                         print("The current data given from each_output is ".format(each_output))
+                    #data.write(str(stuff))
                         sys.stdout.write('\n')
                         sys.stdout.flush()
 
@@ -209,6 +210,7 @@ def driver_duck():
 
                     except(KeyboardInterrupt, EOFError, UnboundLocalError):
                         print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
+                     #data.close()
                         driver.close()
                         break
 
@@ -241,11 +243,13 @@ def driver_duck():
                 driver = io.open('{0}'.format(catpath), int('{0}'.format(buffering_setting)), '{0}'.format(encoding))
                 if towrite == 'n':
                     pass
-                else:
+                elif towrite == 'y':
                     file_path = input("Enter the absolute path to the file you want to write to.")
                     with open("{0}".format(), 'w') as write_file:
                         for each in bytes_received:
                             write_file.write(str(bytes_received + ' '))
+                else:
+                    print("Error with checking write option occured")
                 while True:
                     try:
                         for each_output in driver.read(True):
@@ -261,13 +265,15 @@ def driver_duck():
                                         bytelist.append(' ')
                                         spacing = 0
                         stuff = sys.stdout.write(repr(each_output))
+                    #output = hex(stuff)
                         print("The current bytes_received are {0}".format(bytes_received))
                         print("The current data given from each_output is ".format(each_output))
-
+                    #data.write(str(stuff))
                         sys.stdout.write('\n')
                         sys.stdout.flush()
                     except(KeyboardInterrupt, EOFError, UnboundLocalError):
                         print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
+                     #data.close()
                         driver.close()
                         break
 
@@ -296,11 +302,13 @@ def driver_duck():
                 driver = io.open('{0}'.format(path),'r', buffering = 0, encoding = None,)  #do not use 'rb'
                 if towrite == 'n':
                     pass
-                else:
+                elif towrite == 'y':
                     file_path = input("Enter the absolute path to the file you want to write to.")
                     with open("{0}".format(), 'w') as write_file:
                         for each in bytes_received:
                             write_file.write(str(bytes_received + ' '))
+                else:
+                    print("Error with checking write option occured")
                 while True:
                     try:
                         for each_output in driver.read(True):
@@ -316,9 +324,10 @@ def driver_duck():
                                         bytelist.append(' ')
                                         spacing = 0
                         stuff = sys.stdout.write(repr(each_output))
+                    #output = hex(stuff)
                         print("The current bytes_received are {0}".format(bytes_received))
                         print("The current data given from each_output is ".format(each_output))
-
+                    #data.write(str(stuff))
                         sys.stdout.write('\n')
                         sys.stdout.flush()
 
@@ -327,6 +336,7 @@ def driver_duck():
 
                     except(KeyboardInterrupt, EOFError, UnboundLocalError):
                         print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
+                     #data.close()
                         driver.close()
                         break
 
@@ -339,8 +349,7 @@ def driver_duck():
 
 
 
-
-
 #closing
 if __name__ == "__main__":
     driver_duck()
+
