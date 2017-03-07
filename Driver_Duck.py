@@ -47,7 +47,7 @@ def driver_duck():
             print("If you need more information on your system for driver_duck, use listd, dumpkeys, or show catpath/devpath.")  
             print("If you already know exactly where you need to get your data, you may begin grabbing data with read raw, read binary, read io.")
             print("In rare occasions, you might need the assistence of catpat/devpath when reading. Use 'read custom', which will use both catpath and devpath.")
-            choice = input("What would you like to do?  ")
+            choice = input("What would you like to do?  \n")
             choice = choice.casefold().strip()
 
             if choice == "show catpath":
@@ -58,15 +58,15 @@ def driver_duck():
 
             elif choice == 'change catpath':
                 if catpath == catpath:
-                    catpathnew = str(input("Please enter the directory path to the new value of catpath. Current Value: {0} ".format(catpath)))
+                    catpathnew = input("Please enter the directory path to the new value of catpath. Current Value: {0} ".format(catpath))
                     catpath = catpathnew
                     print("Now the catpath is {0}".format(catpath))
 
                 else:
-                    answer = input("catpath isn't set. Would you like to set it? y/n")
+                    answer = input("catpath isn't set. Would you like to set it? y/n\n")
                     answer = answer.casefold().lower()
                     if answer == 'y':
-                        catpath = str(input("Enter the new path for catpath"))  
+                        catpath = str(input("Enter the new path for catpath\n"))  
                         
                     elif answer == 'n':
                         pass
@@ -135,13 +135,13 @@ def driver_duck():
                 print("'show catpath' with show the current file that driver_duck will read to get known devices.")
                 print("'change catpath' will change where driver_duck looks to read data.")
                 print("'change devpath' will change the directory where driver_duck looks for data.")
-                print("'change devpath' will change the value of devpath")
+                print("'change devpath' will change the value of devpath\n")
                 pass
       
 
             elif choice == 'dumpkeys':
                 print(sysc("dumpkeys"))
-                print("According to your system, these are the signals used by your keyboard")
+                print("According to your system, these are the signals used by your keyboard\n")
                 pass
                 
             
@@ -152,7 +152,7 @@ def driver_duck():
         # This code should help the user find the path to the device/devices available
             elif choice == 'listd':
                 print(sysc("cat /proc/bus/input/devices"))   
-                print("These are the devices with the handles used that could be found by automatically by Driver_duck")
+                print("These are the devices with the handles used that could be found by automatically by driver_duck\n")
                 pass
                 
 
@@ -174,7 +174,7 @@ def driver_duck():
                     pass
                 elif towrite == 'y':
                     file_path = input("Enter the absolute path to the file you want to write to.\n")
-
+                    outputlist = []
                     spacing = 0
                     bytes_received = []
                     bytelist = []
@@ -186,9 +186,9 @@ def driver_duck():
                             try:
                                 for each_output in driver.read(True):
                                     bytes_received.append(each_output)
-                                    outputlist.append(bytes_received)
+                                    outputlist.append(outputlist)
                                     print("The output is {0}".format(each_output))
-                                    write_file.write(outputlist)
+                                    write_file.write(bytes(str(outputlist), 'utf-8'))
                                     if len(bytes_received) == 8:
                                         for each_byte in bytes_received:
                                             bytelist.append(each_byte)
@@ -276,7 +276,7 @@ def driver_duck():
                                     bytes_received.append(each_output)
                                     outputlist.append(bytes_received)
                                     print("The output is {0}".format(each_output))
-                                    write_file.write(str(outputlist))
+                                    write_file.write(bytes(str(outputlist), 'utf-8'))
                                     if len(bytes_received) == 8:
                                         for each_byte in bytes_received:
                                             bytelist.append(each_byte)
@@ -354,7 +354,7 @@ def driver_duck():
                                     bytes_received.append(each_output)
                                     outputlist.append(bytes_received)
                                     print("The output is {0}".format(each_output))
-                                    write_file.write(str(outputlist))
+                                    write_file.write(bytes(str(outputlist), 'utf-8'))
                                     if len(bytes_received) == 8:
                                         for each_byte in bytes_received:
                                             bytelist.append(each_byte)
