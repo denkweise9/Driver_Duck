@@ -83,8 +83,12 @@ def driver_duck():
                     print("devpath is None")
 
             elif choice == 'change devpath':
-                if devpath != None:
-                    devpathnew = input("Please enter the directory path to the new value of devpath. Current Value: {0} ".format(catpath))
+                if not isinstance((devpath), (None)):
+                    devpathnew = input("Please enter the directory path to the new value of devpath. Current Value: {0} ".format(devpath))
+                    devpath = devpathnew
+                    print("Now the devpath is {0}".format(devpath))
+                else:
+                    devpathnew = input("Please enter the directory path to the new value of devpath.\n")
                     devpath = devpathnew
                     print("Now the devpath is {0}".format(devpath))
                
@@ -107,7 +111,7 @@ def driver_duck():
       
 
             elif choice == 'quit':
-                print("Thanks for using driver-duck! Goodbye!")
+                print("Thanks for using driver-duck! Goodbye!\n")
                 break
             
 
