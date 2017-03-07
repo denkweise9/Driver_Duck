@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 '''
     driver_duck.py is a program for reading data streams from drivers.
     Copyright (C) 2017 Zian Smtih     Authors: denkweise9
@@ -32,7 +32,7 @@ def driver_duck():
     datapath = "/home/driver_duck/"   # This is the directory where the data capture file is saved.
     running = True
     print("Driver_duck is a long term project.") 
-    if not (sys.platform.startswith("linux") or sys.platform.startswith('linux2')):
+    if not (sys.platform.startswith("linux")):
         print("Sorry, but Driver_Duck only works on Linux for the time being.")
         sleep(2)
     else:
@@ -65,7 +65,7 @@ def driver_duck():
 
                 else:
                     answer = input("catpath isn't set. Would you like to set it? y/n\n")
-                    answer = answer.casefold().lower()
+                    answer = answer.casefold().strip()
                     if answer == 'y':
                         catpath = input("Enter the new path for catpath\n")
                         
