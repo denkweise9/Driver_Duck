@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 '''
     driver_duck.py is a program for reading data streams from drivers.
     Copyright (C) 2017 Zian Smtih     Authors: denkweise9
@@ -20,10 +21,11 @@
 import subprocess, sys, io, time, os; 
 sysc = subprocess.os.system ; sleep = time.sleep ; 
 encoding = os.device_encoding ; byteio = io.BytesIO
+listdir = os.listdir
 # obj = byteio(b'data here') ; obj.getvalue() ;
 
 #devpath and catpath are both set to None by default, and will just use the path given from the user.
-#This can be useful but in rare but possible situations.
+#This can be useful in rare but possible situations.
 
 
 def driver_duck():
@@ -32,12 +34,46 @@ def driver_duck():
     datapath = "/home/driver_duck/"   # This is the directory where the data capture file is saved.
     running = True
     print("Driver_duck is a long term project.") 
+
     if not (sys.platform.startswith("linux")):
-        print("Sorry, but Driver_Duck only works on Linux for the time being.")
+        print("Sorry, but Driver_Duck only works on GNU/Linux for the time being.")
         sleep(2)
     else:
         print("Welcome to Driver_Duck!\n")
         print("Driver_duck is a long term GNU project.")
+
+    def OSRead(path):
+        while True:
+            try:
+                for each in path:
+                    print("The output is: {0},    It's hex value is {1},    It's binary is {2}".format(each_output, hex(each_output), tobinary(each_output)))
+            except(KeyboardInterrupt, OSError):
+                driver_duck() 
+
+
+    def listpath(path):
+        return listdir(path)
+
+    def path_setup():
+        answer = input("Would you like to setup catpath and devpath? y/n: \nYou can set these up later if you choose 'n'\n")
+        answer = answer.casefold().strip()
+        if answer == 'n':
+            pass
+
+        elif answer == 'y':
+            catpath = input("Enter the absolute path for catpath\n")
+            devpath = input("Enter the absolute path for devpath\n")
+
+        elif answer == 'quit':
+            sys.exit()
+
+        else:
+            print("Invalid syntax, y or n\n")
+            path_setup()
+
+    def tobinary(number):
+        number = int(bin(number) [2:])
+        return number
 
     path_setup()
 
@@ -45,9 +81,10 @@ def driver_duck():
         try:
 
             print("If you need more information on driver_duck, use 'help' or 'listops'.")
-            print("If you need more information on your system for driver_duck, use listd, dumpkeys, or show catpath/devpath.")  
+            print("If you need more information on your system for driver_duck, use:\nlistd, dumpkeys, diskstats, cpuinfo, listdr, listpath or show catpath/devpath.")  
             print("If you already know exactly where you need to get your data, you may begin grabbing data with read raw, read binary, read io.")
             print("In rare occasions, you might need the assistence of catpat/devpath when reading. Use 'read custom', which will use both catpath and devpath.")
+            print("To quit, simply type 'quit'")
             choice = input("What would you like to do?  \n")
             choice = choice.casefold().strip()
 
@@ -58,7 +95,7 @@ def driver_duck():
                     print("catpath is None")
 
             elif choice == 'change catpath':
-                if catpath == catpath:
+                if catpath:
                     catpathnew = input("Please enter the directory path to the new value of catpath. Current Value: {0} ".format(catpath))
                     catpath = catpathnew
                     print("Now the catpath is {0}".format(catpath))
@@ -73,8 +110,15 @@ def driver_duck():
                         pass
                     else:
                         print("Either you gave invalid input, or an error occured.")
+            
+            elif choice == 'listdr':
+                print(sysc("cat /proc/crypto")) 
 
+            elif choice == 'cpuinfo':
+                print(sysc("cat /proc/cpuinfo"))
 
+            elif choice == 'diskstats':
+                print(sysc("cat /proc/diskstats"))
 
             elif choice == "show devpath":
                 if not isinstance((devpath), (None)):
@@ -108,8 +152,7 @@ def driver_duck():
 
             elif choice == 'quit':
                 print("Thanks for using driver-duck! Goodbye!\n")
-                break
-            
+                sys.exit()
 
             elif choice == 'help':
         #Give basic's and common path locations to users.
@@ -118,21 +161,41 @@ def driver_duck():
                 print("")
                 print("If you need more information on specific commands, type 'listops' which is short for 'list options'")
  #  We need to implement the 'write' function. Not included yet
-                print("")
+                print("driver_duck can not read from all streams off the bat yet, but does work with some.")
                 print("Common paths to devices include:")
                 print("/dev/input/mouse0")
                 print("/dev/usb/hiddev0")   #improve help for the user.
-                print("")
+                print("/dev/video0")
 
 
 
             elif choice == 'listops':
-                print("listd will read /proc/bus/input/devices to find common devices automatically.")
                 print("")
-                
-                print("'read raw' will just read the input of the device as is. This may not always work.")
-                print("'read binary' will use the builtin 'rb' function with python to open the data as binary. This does not mean your data will be in all '10101's.")
+
+                #info on reading commands
+                print("'read raw' will just read the input of the device as is.")
+                print(" This may not always work as different drivers have different integer bases. Such as binary and hexadecimal.")
+                print("'read custom' will allow you to use more customized settings when opening files or streams if you are not familair with python")
+                print("'read binary' will use the builtin 'rb' function with python to open the data interpreted as binary.")
+                print("This is the most reliable way to read data, and will display the data in three formats:")
+                print("Decimal, Hexidecimal, Binary.  This is done to make it easier for you to interpret the data gathered.")        
+                #info on system commands
                 print("'dumpkeys' will ask the OS you're using to give the data used by the keyboard.")
+                print("listd will read /proc/bus/input/devices to find common devices automatically.")
+                print("cpuinfo will read /proc/cpuinfo")
+                print("listdr will read /proc/crypto, and display the names to some drivers")
+                print("diskstats will read /proc/diskstats")
+                print("listpath will use os.listdir(path) and tell you all the items in that directory. Useful for finding other paths to find data streams.")
+                print("With elevated privlages, you can sometimes find hidden items in a directory.\n")
+                #info on driver_duck commands
+                print("'pathinfo' or 'devinfo' will give you more information on catpath and devpath\n")
+            elif choice == ('pathinfo' or 'devinfo'):       
+                #info on catpath/devpath
+                print("catpath is the path you specifically read data from, devpath is the device where the data is.")
+                print("Suppose you're using a laptop to start reading from a connection on a microcontroller, or a raspberry pi, ")
+                print("Using catpath and devpath can help you in reading other devices. If you're just reading mouse drivers on a laptop,")
+                print("You probably won't need it.\n")
+
                 print("'show catpath' with show the current file that driver_duck will read to get known devices.")
                 print("'change catpath' will change where driver_duck looks to read data.")
                 print("'change devpath' will change the directory where driver_duck looks for data.")
@@ -146,7 +209,9 @@ def driver_duck():
                 pass
                 
             
-
+            elif choice == 'listpath':
+                path = input("Enter the path to the directory\n")
+                listpath(path)
         
             
             
@@ -170,7 +235,9 @@ def driver_duck():
                         towrite = input("Do you want to save the gathered data to a file? y/n ")
                     except(KeyboardInterrupt):
                         sys.exit()
+
                 towrite = towrite.casefold().strip()
+
                 if towrite == 'n':
                     pass
                 elif towrite == 'y':
@@ -188,7 +255,7 @@ def driver_duck():
                                 for each_output in driver.read(True):
                                     bytes_received.append(each_output)
                                     outputlist.append(outputlist)
-                                    print("The output is: {0}, It's hex value is {1}, It's binary is {2}".format(each_output, hex(each_output), tobinary(each_output)))
+                                    print("The output is: {0},    It's hex value is {1},    It's binary is {2}".format(each_output, hex(each_output), tobinary(each_output)))
                                     #write_file.write(bytes(str(outputlist), 'utf-8'))
                                     write_file.write(str(outputlist))
                                     if len(bytes_received) == 8:
@@ -210,13 +277,14 @@ def driver_duck():
                 bytes_received = []
                 bytelist = []
                 
+
                 driver = io.open(path, 'rb', buffering = 0, encoding = None,)
 
                 while True:
                     try:
                         for each_output in driver.read(True):
                             bytes_received.append(each_output)
-                            print("The output is: {0}, It's hex value is {1}, It's binary is {2}".format(each_output, hex(each_output), tobinary(each_output)))
+                            print("The output is: {0},    It's hex value is {1},    It's binary is {2}".format(each_output, hex(each_output), tobinary(each_output)))
                             if len(bytes_received) == 8:
                                 for each_byte in bytes_received:
                                     bytelist.append(each_byte)
@@ -225,7 +293,12 @@ def driver_duck():
                                         sys.stdout.write('\n')
                                         bytelist.append(' ')
                                         spacing = 0
-
+                    except(OSError):
+                        print("OSError occured\n")
+                        try:
+                            OSRead(driver)  #Will make updates later. fails on /dev/video0,  I need to make OSRead()
+                        except(OSError):
+                            driver_duck()
                     except(FileNotFoundError):
                         file_path = input("Enter the absolute path to the file you want to write to.\n")
 
@@ -403,36 +476,11 @@ def driver_duck():
                         driver.close()
                         break
                 
- 
 
 
         except(KeyboardInterrupt):
             print("Thank you for using GNU driver_duck.py!\n")
             sys.exit()
-
-
-
-
-
-
-
-
-def path_setup():
-    answer = input("Would you like to setup catpath and devpath? y/n: \nYou can set these up later if you choose 'n'\n")
-    answer = answer.casefold().strip()
-    if answer == 'n':
-        pass
-    elif answer == 'y':
-        catpath = input("Enter the absolute path for catpath\n")
-        devpath = input("Enter the absolute path for devpath\n")
-    else:
-        print("Invalid syntax, y or n\n")
-        path_setup()
-
-
-def tobinary(number):
-    number = int(bin(number) [2:])
-    return number
 
 #New exception for Windows needed here.
 
