@@ -188,7 +188,7 @@ def driver_duck():
                                 for each_output in driver.read(True):
                                     bytes_received.append(each_output)
                                     outputlist.append(outputlist)
-                                    print("The output is: {0}\n It's hex value is {1}".format(each_output, hex(each_output)))
+                                    print("The output is: {0}, It's hex value is {1}, It's binary is {2}".format(each_output, hex(each_output), tobinary(each_output)))
                                     #write_file.write(bytes(str(outputlist), 'utf-8'))
                                     write_file.write(str(outputlist))
                                     if len(bytes_received) == 8:
@@ -216,7 +216,7 @@ def driver_duck():
                     try:
                         for each_output in driver.read(True):
                             bytes_received.append(each_output)
-                            print("The output is: {0}\n It's hex value is {1}".format(each_output, hex(each_output)))
+                            print("The output is: {0}, It's hex value is {1}, It's binary is {2}".format(each_output, hex(each_output), tobinary(each_output)))
                             if len(bytes_received) == 8:
                                 for each_byte in bytes_received:
                                     bytelist.append(each_byte)
@@ -428,6 +428,12 @@ def path_setup():
     else:
         print("Invalid syntax, y or n\n")
         path_setup()
+
+
+def tobinary(number):
+    number = int(bin(number) [2:])
+    return number
+
 #New exception for Windows needed here.
 
 
