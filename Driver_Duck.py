@@ -18,11 +18,12 @@
     along with this program.  If not, see https://www.gnu.org/licenses/.
 '''
 
-import subprocess, sys, io, time, os; 
-sysc = subprocess.os.system ; sleep = time.sleep ; 
+import subprocess, sys, io, time, os, struct
+sysc = subprocess.os.system ; sleep = time.sleep 
 encoding = os.device_encoding ; byteio = io.BytesIO
 listdir = os.listdir
 # obj = byteio(b'data here') ; obj.getvalue() ;
+# struct will be used for lower level injections, among other things
 
 #devpath and catpath are both set to None by default, and will just use the path given from the user.
 #This can be useful in rare but possible situations.
@@ -33,7 +34,6 @@ def driver_duck():
     devpath = None # This is the directory that may contain one or many places you wish to capture data
     datapath = "/home/driver_duck/"   # This is the directory where the data capture file is saved.
     running = True
-    print("Driver_duck is a long term project.") 
 
     if not (sys.platform.startswith("linux")):
         print("Sorry, but Driver_Duck only works on GNU/Linux for the time being.")
@@ -42,7 +42,7 @@ def driver_duck():
         print("Welcome to Driver_Duck!\n")
         print("Driver_duck is a long term GNU project.")
 
-    def OSRead(path):
+    def OSRead(path):  #this is not by any means finished
         while True:
             try:
                 for each in path:
@@ -144,6 +144,10 @@ def driver_duck():
                     else:
                         print("Either you gave invalid input, or an error occured.")
 
+            elif (choice == 'devinfo') or (choice == 'catinfo'):
+                print("If you were using a laptop to read data begin sent to two external devices, catpath and devpath might help")
+                print("catpath is where you are reading, devpath is the device that is the source of the data.")
+            
 
             elif choice == None:
                 print("parameters for driver_duck are 'quit', 'read', 'listd','listops','change catpath' 'show catpath', or 'help'")  # needs work        
@@ -155,12 +159,13 @@ def driver_duck():
                 sys.exit()
 
             elif choice == 'help':
-        #Give basic's and common path locations to users.
+                sysc('clear')
+                # Give basic's and common path locations to users.
                 print("Driver_Duck is designed to be able to give the user information on the drivers/protocols being used by their device/s")
                 print("parameters for driver_duck are 'read raw', 'read io', 'read binary', 'listd','listops','change catpath' 'show catpath', 'help',")
                 print("")
                 print("If you need more information on specific commands, type 'listops' which is short for 'list options'")
- #  We need to implement the 'write' function. Not included yet
+                # We need to implement the 'write' function. Not included yet
                 print("driver_duck can not read from all streams off the bat yet, but does work with some.")
                 print("Common paths to devices include:")
                 print("/dev/input/mouse0")
@@ -306,7 +311,7 @@ def driver_duck():
                         print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
                      #data.close()
                         driver.close()
-                        break
+                        driver_duck()
 
 
             elif choice == 'read custom':
@@ -398,7 +403,7 @@ def driver_duck():
                         print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
                      #data.close()
                         driver.close()
-                        break
+                        driver_duck()
 
 
 
