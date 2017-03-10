@@ -43,7 +43,7 @@ def driver_duck():
         print("Driver_duck is a long term GNU project.")
 
     def OSRead(path):  #this is not by any means finished
-        while True:
+        while running:
             try:
                 for each in path:
                     print("The output is: {0},    It's hex value is {1},    It's binary is {2}".format(each_output, hex(each_output), tobinary(each_output)))
@@ -57,6 +57,22 @@ def driver_duck():
     def path_setup():
         answer = input("Would you like to setup catpath and devpath? y/n: \nYou can set these up later if you choose 'n'\n")
         answer = answer.casefold().strip()
+
+        logo = r'''
+
+
+     _       _                          _             _     
+    | |     (_)                        | |           | |    
+  __| | ____ _ _   _ _____  ____     __| |_   _  ____| |  _ 
+ / _  |/ ___) | | | | ___ |/ ___)   / _  | | | |/ ___) |_/ )
+( (_| | |   | |\ V /| ____| |      ( (_| | |_| ( (___|  _ ( 
+ \____|_|   |_| \_/ |_____)_|       \____|____/ \____)_| \_)
+
+        
+                ''' 
+
+        print(logo)
+
         if answer == 'n':
             pass
 
@@ -488,6 +504,7 @@ def driver_duck():
             sys.exit()
 
 #New exception for Windows needed here.
+
 
 
 
