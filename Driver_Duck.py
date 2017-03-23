@@ -503,10 +503,121 @@ def driver_duck():
             print("Thank you for using GNU driver_duck.py!\n")
             sys.exit()
 
+# The following functions are copied here, incase you want to import driver_duck.py, and use functions
+# in your own code
+
+def listpath(path):
+    return listdir(path)
+
+def path_setup():
+    answer = input("Would you like to setup catpath and devpath? y/n: \nYou can set these up later if you choose 'n'\n")
+    answer = answer.casefold().strip()
+
+logo = r'''
+
+
+     _       _                          _             _     
+    | |     (_)                        | |           | |    
+  __| | ____ _ _   _ _____  ____     __| |_   _  ____| |  _ 
+ / _  |/ ___) | | | | ___ |/ ___)   / _  | | | |/ ___) |_/ )
+( (_| | |   | |\ V /| ____| |      ( (_| | |_| ( (___|  _ ( 
+ \____|_|   |_| \_/ |_____)_|       \____|____/ \____)_| \_)
+
+        
+       ''' 
+
+
+
+
+def tobinary(number):
+    number = int(bin(number) [2:])
+    return number
+
+
+
+def read_binary():
+    print("Once driver_duck starts reading, it will keep reading until given a keyboard interrupt, or Ctrl+C")
+    print("This will read the data in binary, with no buffering, no encoding.")
+    print("If you save the data into a file, it will be written as binary as well")
+    path = None; towrite = None;
+    while not isinstance((path), (str)) or not isinstance((towrite), (str)):
+        try:
+            path = input('Please enter the path of the device to read from:  \n')
+            towrite = input("Do you want to save the gathered data to a file? y/n ")
+        except(KeyboardInterrupt):
+            sys.exit()
+
+        towrite = towrite.casefold().strip()
+
+        if towrite == 'n':
+            pass
+        elif towrite == 'y':
+            file_path = input("Enter the absolute path to the file you want to write to.\n")
+            outputlist = []
+            spacing = 0
+            bytes_received = []
+            bytelist = []
+                 
+            driver = io.open(path, 'rb', buffering = 0, encoding = None,)
+
+            with open(file_path, 'w') as write_file:
+                while True:
+                    try:
+                        for each_output in driver.read(True):
+                            bytes_received.append(each_output)
+                            outputlist.append(outputlist)
+                            print("The output is: {0},    It's hex value is {1},    It's binary is {2}".format(each_output, hex(each_output), tobinary(each_output)))
+                            write_file.write(str(outputlist))
+                            if len(bytes_received) == 8:
+                                for each_byte in bytes_received:
+                                    bytelist.append(each_byte)
+                                    spacing += 1
+                                        if spacing == 2:
+                                            sys.stdout.write('\n')
+                                            bytelist.append(' ')
+                                            spacing = 0
+                                   
+                    except(KeyboardInterrupt):
+                        write_file.close()
+                        sys.exit()
+        else:
+            print("Error with checking write option occured")
+            spacing = 0
+            bytes_received = []
+            bytelist = []
+                
+
+            driver = io.open(path, 'rb', buffering = 0, encoding = None,)
+
+            while True:
+                try:
+                    for each_output in driver.read(True):
+                        bytes_received.append(each_output)
+                        print("The output is: {0},    It's hex value is {1},    It's binary is {2}".format(each_output, hex(each_output), tobinary(each_output)))
+                        if len(bytes_received) == 8:
+                            for each_byte in bytes_received:
+                                bytelist.append(each_byte)
+                                spacing += 1
+                                if spacing == 2:
+                                    sys.stdout.write('\n')
+                                    bytelist.append(' ')
+                                    spacing = 0
+                except(OSError):
+                    print("OSError occured, trying OSRead: \n")
+                    try:
+                        OSRead(driver)  #Will make updates later. fails on /dev/video0,  I need to make OSRead()
+                    except(OSError):
+                        print("OSRead Failed\n")
+                        driver_duck()
+                    except(FileNotFoundError):
+                        file_path = input("Enter the absolute path to the file you want to write to.\n")
+            except(KeyboardInterrupt, EOFError, UnboundLocalError):
+                print("Encountered a KeyboardInterrupt, UnboundLocalError or a EOFError")
+                driver.close()
+                driver_duck()
+
+
 #New exception for Windows needed here.
-
-
-
 
 #closing
 if __name__ == "__main__":
